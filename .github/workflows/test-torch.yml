@@ -1,0 +1,22 @@
+name: conda-package
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    steps:
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          auto-activate-base: true
+          activate-environment: ""
+          channel-priority: strict
+          miniforge-version: latest
+          conda-solver: libmamba
+      - name: set up conda environment
+        run: conda install -n base -c nvidia -c pytorch -c conda-forge -c nodefaults python=3.9.* pytorch torchvision pytorch-cuda
+      - name: import torch
+        run: python -c "import torch; print(torch.__version__)"
